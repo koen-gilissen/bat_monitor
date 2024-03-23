@@ -1,0 +1,148 @@
+[
+    {
+        "id": "41139074ed6b96aa",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "46342808ce45450e",
+        "type": "mqtt in",
+        "z": "41139074ed6b96aa",
+        "name": "",
+        "topic": "test",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "c9d9edd189093afd",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 290,
+        "y": 200,
+        "wires": [
+            [
+                "42315d08e34f9e2c"
+            ]
+        ]
+    },
+    {
+        "id": "828b9150241f1544",
+        "type": "debug",
+        "z": "41139074ed6b96aa",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "42315d08e34f9e2c",
+        "type": "json",
+        "z": "41139074ed6b96aa",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 450,
+        "y": 200,
+        "wires": [
+            [
+                "cd1eb87a08ee81ad"
+            ]
+        ]
+    },
+    {
+        "id": "ddcb0718cb912beb",
+        "type": "influxdb out",
+        "z": "41139074ed6b96aa",
+        "influxdb": "28b2e10daf73495d",
+        "name": "influx",
+        "measurement": "",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 890,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "cd1eb87a08ee81ad",
+        "type": "function",
+        "z": "41139074ed6b96aa",
+        "name": "Json to influxdb",
+        "func": "msg.payload = [{\n    id: +msg.payload.id,\n    temperature: +msg.payload.T, \n    humidity:+msg.payload.H\n},\n{\n    tag1:\"Measurement\"\n}];\n\nmsg.measurement=\"datapoint\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 200,
+        "wires": [
+            [
+                "ddcb0718cb912beb",
+                "828b9150241f1544"
+            ]
+        ]
+    },
+    {
+        "id": "c9d9edd189093afd",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "28b2e10daf73495d",
+        "type": "influxdb",
+        "hostname": "server.pxl-ea-ict.be",
+        "port": "24011",
+        "protocol": "http",
+        "database": "batman",
+        "name": "batman_remote",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    }
+]
